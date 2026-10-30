@@ -142,7 +142,7 @@
 
   <main class="card">
   <button id="connectWallet">Connect Wallet</button>
-<script>document.getElementById("connectwallet")
+
     <div class="logo">SMART REVESTIME</div>
 
   <h1 def get_client(network):
@@ -172,7 +172,7 @@ client = get_client("ethereum")
 
 }
       
-   </script>
+   <script>
 const connectButton = document.getElementById("connectWallet");
 
 if (connectButton) {
@@ -190,12 +190,12 @@ if (connectButton) {
       if (accounts.length > 0) {
         connectButton.textContent =
           accounts[0].slice(0, 6) + "..." + accounts[0].slice(-4);
-        alert("Wallet connected successfully!");
       }
     } catch (error) {
-      alert("Wallet connection cancelled or failed.");
+      alert("Wallet connection failed or was cancelled.");
     }
   });
 }
+</script>
 </body>
-    </html>
+</html>
