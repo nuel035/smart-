@@ -172,6 +172,30 @@ client = get_client("ethereum")
 
 }
       
-    </script>
-    </body>
+   </script>
+const connectButton = document.getElementById("connectWallet");
+
+if (connectButton) {
+  connectButton.addEventListener("click", async () => {
+    if (!window.ethereum) {
+      alert("No compatible wallet detected. Open this website in your wallet's DApp browser.");
+      return;
+    }
+
+    try {
+      const accounts = await window.ethereum.request({
+        method: "eth_requestAccounts"
+      });
+
+      if (accounts.length > 0) {
+        connectButton.textContent =
+          accounts[0].slice(0, 6) + "..." + accounts[0].slice(-4);
+        alert("Wallet connected successfully!");
+      }
+    } catch (error) {
+      alert("Wallet connection cancelled or failed.");
+    }
+  });
+}
+</body>
     </html>
